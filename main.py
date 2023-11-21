@@ -1,6 +1,7 @@
 import hikari
 import tanjun
 from config import *
+import plugins
 
 bot = hikari.GatewayBot(token=TOKEN, intents=hikari.Intents.ALL)
 
@@ -17,8 +18,21 @@ def make_client(bot: hikari.GatewayBot) -> tanjun.Client:
 
     return client
 
+
+def build_bot() -> hikari.GatewayBot:
+    bot = hikari.GatewayBot(TOKEN, intents=hikari.Intents.ALL)
+
+    make_client(bot)
+
+    return bot
+
+
+
+
+
 def main():
-    bot.run(status=hikari.presences.Status.DO_NOT_DISTURB)
+    build_bot().run(status=hikari.presences.Status.DO_NOT_DISTURB)
+
 
 if __name__ == '__main__':
     main()
