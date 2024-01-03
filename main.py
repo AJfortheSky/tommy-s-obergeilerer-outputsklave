@@ -1,37 +1,21 @@
 import hikari
-import tanjun
 from config import *
-import plugins
-
-bot = hikari.GatewayBot(token=TOKEN, intents=hikari.Intents.ALL)
-
-def make_client(bot: hikari.GatewayBot) -> tanjun.Client:
-    client = (
-        tanjun.Client.from_gateway_bot(
-            bot,
-            mention_prefix=True,
-            set_global_commands=DEFAULT_GUILD
-        )
-    ).add_prefix("!")
-
-    client.load_modules('plugins.utilities')
-
-    return client
-
-
-def build_bot() -> hikari.GatewayBot:
-    bot = hikari.GatewayBot(TOKEN, intents=hikari.Intents.ALL)
-
-    make_client(bot)
-
-    return bot
 
 
 
+bot = hikari.GatewayBot(TOKEN, intents=hikari.Intents.ALL)
 
+
+@bot.listen()
+async def voice_role(event: hikari.VoiceStateUpdateEvent):
+    if event.old_state is None:
+        await bot.rest.add_role_to_member(guild=DEFAULT_GUILD, user=event.state.member.id, role=VOICE_ROLE)
+
+    if event.state is None:
+        await bot.rest.remove_role_from_member(guild=DEFAULT_GUILD, user=event.state.member.id, role=VOICE_ROLE)
 
 def main():
-    build_bot().run(status=hikari.presences.Status.DO_NOT_DISTURB)
+    bot.run(status=hikari.presences.Status.DO_NOT_DISTURB)
 
 
 if __name__ == '__main__':
