@@ -3,7 +3,7 @@ from config import *
 
 
 
-bot = hikari.GatewayBot(TOKEN, intents=hikari.Intents.ALL)
+bot = hikari.BotApp(TOKEN, intents=hikari.Intents.ALL)
 
 
 @bot.listen()
